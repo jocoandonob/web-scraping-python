@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joco Scraper API</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/custom.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container my-4">
+        <header class="mb-5">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-spider text-primary me-2"></i> Joco Scraper API</h1>
+                    <p class="lead">Extract structured data from websites with ease</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="d-flex justify-content-md-end">
+                        <span id="rate-limit-display" class="badge bg-secondary py-2 px-3">
+                            <i class="fas fa-tachometer-alt me-1"></i> 
+                            Requests remaining: <span id="remaining-requests">--</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </header>
+
+        <!-- Sample Data Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark">
+                        <h3>Sample Websites to Scrape</h3>
+                        <p class="text-muted mb-0">Click on any example to auto-fill the form</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- Example 1: General News -->
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 sample-card" data-url="https://www.bbc.com" data-type="text" data-selector="article">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/2965/2965879.png" class="card-img-top p-3" alt="News" style="height: 100px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">News Article</h5>
+                                        <p class="card-text text-muted small">Extract text content from BBC News articles</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Example 2: Wikipedia -->
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 sample-card" data-url="https://en.wikipedia.org/wiki/Web_scraping" data-type="text" data-selector=".mw-parser-output">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111728.png" class="card-img-top p-3" alt="Wikipedia" style="height: 100px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Wikipedia</h5>
+                                        <p class="card-text text-muted small">Extract content from Wikipedia articles</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Example 3: Country Data -->
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 sample-card" data-url="https://www.worldometers.info/geography/alphabetical-list-of-countries/" data-type="tables" data-selector="table">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/44/44386.png" class="card-img-top p-3" alt="Geography Data" style="height: 100px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Country Data</h5>
+                                        <p class="card-text text-muted small">Extract countries information and statistics</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Example 4: E-commerce -->
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 sample-card" data-url="https://books.toscrape.com/" data-type="images" data-selector=".product_pod">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/3081/3081559.png" class="card-img-top p-3" alt="E-commerce" style="height: 100px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Product Images</h5>
+                                        <p class="card-text text-muted small">Extract product images from an e-commerce site</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Example 5: Weather Data -->
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 sample-card" data-url="https://www.weather.gov/" data-type="text" data-selector=".forecast-conditions">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/1779/1779940.png" class="card-img-top p-3" alt="Weather" style="height: 100px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Weather Data</h5>
+                                        <p class="card-text text-muted small">Extract weather forecast information</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Example 6: Programming Doc -->
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 sample-card" data-url="https://docs.python.org/3/tutorial/index.html" data-type="links" data-selector=".toctree-wrapper">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/3098/3098090.png" class="card-img-top p-3" alt="Documentation" style="height: 100px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Documentation</h5>
+                                        <p class="card-text text-muted small">Extract links from Python documentation</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Example 7: Sports Stats -->
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 sample-card" data-url="https://www.espn.com/nfl/standings" data-type="tables" data-selector=".standings__table">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/857/857455.png" class="card-img-top p-3" alt="Sports" style="height: 100px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Sports Stats</h5>
+                                        <p class="card-text text-muted small">Extract sports standings tables</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Example 8: Restaurant Info -->
+                            <div class="col-md-3 mb-3">
+                                <div class="card h-100 sample-card" data-url="https://www.allrecipes.com/recipes/76/appetizers-and-snacks/" data-type="full" data-selector=".card__recipe">
+                                    <img src="https://cdn-icons-png.flaticon.com/512/2515/2515183.png" class="card-img-top p-3" alt="Recipes" style="height: 100px; object-fit: contain;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Recipe Data</h5>
+                                        <p class="card-text text-muted small">Extract recipes with all available data</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-dark">
+                        <h3>Scrape a Website</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="scrape-form">
+                            <div class="mb-3">
+                                <label for="url" class="form-label">URL to Scrape</label>
+                                <input type="url" class="form-control" id="url" 
+                                       placeholder="https://example.com" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="scrape-type" class="form-label">Data to Extract</label>
+                                <select class="form-select" id="scrape-type">
+                                    <option value="text" selected>Text Content</option>
+                                    <option value="tables">Tables</option>
+                                    <option value="links">Links</option>
+                                    <option value="images">Images</option>
+                                    <option value="full">All Data</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="selector" class="form-label">CSS Selector (Optional)</label>
+                                <input type="text" class="form-control" id="selector" 
+                                       placeholder="e.g., div.article, #content">
+                                <div class="form-text">Target specific elements on the page</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="advanced-options-toggle">
+                                    <label class="form-check-label" for="advanced-options-toggle">Show Advanced Options</label>
+                                </div>
+                            </div>
+
+                            <div id="advanced-options" class="d-none mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label for="user-agent" class="form-label">User Agent</label>
+                                            <input type="text" class="form-control" id="user-agent" 
+                                                placeholder="Custom User Agent">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="timeout" class="form-label">Timeout (seconds)</label>
+                                            <input type="number" class="form-control" id="timeout" 
+                                                placeholder="30" min="1" max="60">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-scrape" id="scrape-button">
+                                    <i class="fas fa-spider me-2"></i> Scrape Data
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header bg-dark d-flex justify-content-between align-items-center">
+                        <h3>Export Options</h3>
+                        <div>
+                            <button id="export-json" class="btn btn-sm btn-outline-light me-2" disabled>
+                                <i class="fas fa-file-code me-1"></i> JSON
+                            </button>
+                            <button id="export-csv" class="btn btn-sm btn-outline-light" disabled>
+                                <i class="fas fa-file-csv me-1"></i> CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted">Scrape a website first to enable export options</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header bg-dark">
+                        <h3>Results</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="results-placeholder" class="text-center py-5">
+                            <i class="fas fa-search fa-3x mb-3 text-muted"></i>
+                            <p class="lead text-muted">Scrape a website to see results here</p>
+                        </div>
+                        
+                        <div id="results-container" class="d-none">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>Scraped Data</h4>
+                                    <div>
+                                        <button id="copy-results" class="btn btn-sm btn-secondary">
+                                            <i class="fas fa-copy me-1"></i> Copy
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr>
+                            </div>
+                            
+                            <div id="results-loading" class="text-center py-5 d-none">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="mt-3">Scraping website...</p>
+                            </div>
+                            
+                            <div id="results-content" class="overflow-auto" style="max-height: 500px;">
+                                <!-- Results will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-dark">
+                        <h3>API Documentation</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Endpoints</h4>
+                                <ul class="list-group mb-4">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-primary me-2">POST</span>
+                                            <code>/api/scrape</code>
+                                        </div>
+                                        <span class="badge bg-secondary">Scrape a URL</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-success me-2">GET</span>
+                                            <code>/api/config</code>
+                                        </div>
+                                        <span class="badge bg-secondary">Get scraper config</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="badge bg-success me-2">GET</span>
+                                            <code>/api/rate-limit</code>
+                                        </div>
+                                        <span class="badge bg-secondary">Check rate limit</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Example API Request</h4>
+                                <pre class="bg-dark text-light p-3 rounded"><code>POST /api/scrape
+{
+  "url": "https://example.com",
+  "scrape_type": "text",
+  "selector": "div.content",
+  "config": {
+    "timeout": 30,
+    "user_agent": "Custom User Agent"
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-5 text-center text-muted">
+            <p>Web Scraper API - A Python-based web scraping service</p>
+            <p class="small">Please scrape responsibly 🕸️</p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
