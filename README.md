@@ -67,4 +67,48 @@ gunicorn app:application
 
 ## License
 
-MIT (or specify your license) 
+MIT (or specify your license)
+
+## Docker Instructions
+
+### Building the Docker Image
+
+To build the Docker image, run the following command in the root directory of the project:
+
+```bash
+docker build -t your-image-name .
+```
+
+### Pushing the Docker Image
+
+1. **Tag the image with your registry URL:**
+
+   ```bash
+   docker tag your-image-name your-registry-url/your-image-name:tag
+   ```
+
+   Replace `your-registry-url` with your Docker registry URL (e.g., `docker.io/yourusername`), `your-image-name` with the name you used when building the image, and `tag` with the version or tag you want to use.
+
+2. **Push the image to the registry:**
+
+   ```bash
+   docker push your-registry-url/your-image-name:tag
+   ```
+
+   Make sure you are logged in to your Docker registry. You can log in using:
+
+   ```bash
+   docker login your-registry-url
+   ```
+
+   Enter your username and password when prompted.
+
+### Running the Docker Container
+
+To run the Docker container, use the following command:
+
+```bash
+docker run -p 5000:5000 your-image-name
+```
+
+This will map port 5000 of the container to port 5000 on your host machine. 
