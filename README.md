@@ -1,5 +1,7 @@
 # Flask Web Scraper
 
+![DataHarvest](generated-icon.png)
+
 This project is a Flask-based web application for scraping website content, including text, tables, links, and images. It provides a REST API and a simple web interface.
 
 ## Features
